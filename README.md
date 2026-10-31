@@ -86,6 +86,8 @@ Or with Docker:
 docker build -t india-weather-risk . && docker run -p 8000:8000 india-weather-risk
 ```
 
+**Just want to look at it?** Run `python scripts/build_standalone.py` to build `india-weather-risk.html`, a single file with the map and the current forecast built in. Open it in any browser, or with VS Code's Live Server. No server or Python environment needed.
+
 Run the tests with `pytest`. They use a recorded API response, so they work offline.
 
 ## Deploy

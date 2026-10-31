@@ -229,7 +229,9 @@
   });
 
   // ---------- boot ----------
-  Promise.all([
+  // The single-file build (scripts/build_standalone.py) embeds the data so it opens without a server.
+  const embedded = window.EMBEDDED_DATA;
+  Promise.all(embedded ? [embedded.geo, embedded.snap] : [
     fetch("data/districts.geojson").then((r) => { if (!r.ok) throw new Error("map"); return r.json(); }),
     fetch("data/latest.json", { cache: "no-cache" }).then((r) => { if (!r.ok) throw new Error("forecast"); return r.json(); }),
   ]).then(([geo, snap]) => {
