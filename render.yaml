@@ -1,0 +1,9 @@
+# One-click deploy of the API + map on Render's free tier:
+# Render dashboard -> New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: india-weather-risk
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    autoDeploy: true

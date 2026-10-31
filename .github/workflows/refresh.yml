@@ -1,0 +1,44 @@
+name: Refresh forecast
+
+on:
+  schedule:
+    - cron: "17 0 * * *"   # 05:47 IST
+    - cron: "17 12 * * *"  # 17:47 IST
+  workflow_dispatch:
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch forecasts and score risk
+        run: python scripts/refresh.py
+      - name: Commit snapshot
+        run: |
+          git config user.name "weather-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/latest.json
+          if git diff --cached --quiet; then echo "No change"; exit 0; fi
+          git commit -m "data: forecast refresh $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  deploy:
+    needs: refresh
+    uses: ./.github/workflows/pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

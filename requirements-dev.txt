@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest>=8
+ruff>=0.6
+# only needed to rebuild data/districts.* from the source shapefile
+pyshp>=2.3
+shapely>=2.0

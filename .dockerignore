@@ -1,0 +1,7 @@
+.git
+.github
+.venv
+tests
+docs
+scripts/build_districts.py
+**/__pycache__
